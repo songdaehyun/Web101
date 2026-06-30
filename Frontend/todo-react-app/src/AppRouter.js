@@ -1,10 +1,11 @@
 import React from "react";
 import "./index.css";
-import App from "./App";
+import TodoPage from "./TodoPage";
 import Login from "./Login";
 import SignUp from "./SignUp";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Typography, Box } from "@mui/material";
+import CalendarPage from "./CalendarPage";
 
 function Copyright() {
   return (
@@ -21,7 +22,8 @@ function AppRouter() {
     <div>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<App />} />
+          <Route path="/" element={<CalendarPage />} />
+          <Route path="/todo/:date" element={<TodoPage />} />
           <Route path="login" element={<Login />} />
           <Route path="signup" element={<SignUp />} />
         </Routes>

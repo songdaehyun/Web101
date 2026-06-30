@@ -34,8 +34,6 @@ public class TodoController {
 			entity.setId(null);
 			
 			entity.setUserId(userId);
-
-            entity.setTodoDate(LocalDate.of(2026, 6, 30));
 			
 			List<TodoEntity> entities = service.create(entity);
 			

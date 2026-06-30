@@ -1,6 +1,7 @@
 import "./App.css";
 import Todo from "./Todo";
 import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   Container,
   List,
@@ -14,12 +15,14 @@ import {
 import AddTodo from "./AddTodo";
 import { call, signout } from "./ApiService";
 
-function App() {
+function TodoPage() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { date } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    call("/todo?date=2026-06-30", "GET", null)
+    call(`/todo?date=${date}`, "GET", null)
       .then((response) => {
         setItems(response.data);
         setLoading(false);
@@ -28,10 +31,11 @@ function App() {
         console.error("Error fetching data:", error);
         // 에러 처리 로직 추가
       });
-  }, []);
+  }, [date]);
 
   const addItem = (item) => {
-    call("/todo", "POST", item).then((response) => setItems(response.data));
+    const newItem = {...item,todoDate: date,};
+    call("/todo", "POST", newItem).then((response) => setItems(response.data));
   };
 
   const deleteItem = (item) => {
@@ -93,7 +97,7 @@ function App() {
     content = todoListPage;
   }
 
-  return <div className="App">{content}</div>;
+  return <div className="TodoPage">{content}</div>;
 }
 
-export default App;
+export default TodoPage;
