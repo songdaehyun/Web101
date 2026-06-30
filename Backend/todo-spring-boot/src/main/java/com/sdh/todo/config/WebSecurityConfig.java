@@ -30,7 +30,7 @@ public class WebSecurityConfig {
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/test", "/health",  "/auth/**").permitAll()
+                .requestMatchers("/test", "/health",  "/auth/**", "/todo/test").permitAll()
                 .anyRequest().authenticated())
             .addFilterAfter(jwtAuthenticationFilter, CorsFilter.class);
 

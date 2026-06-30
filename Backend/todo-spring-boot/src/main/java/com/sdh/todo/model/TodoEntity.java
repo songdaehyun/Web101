@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+import java.time.LocalDate;
 
 @Builder
 @NoArgsConstructor
@@ -24,5 +25,6 @@ public class TodoEntity {
 	private String id;
 	private String userId;
 	private String title;
+    private LocalDate todoDate;
 	private boolean done;
 }

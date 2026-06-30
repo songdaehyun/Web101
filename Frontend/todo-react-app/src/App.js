@@ -19,7 +19,7 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    call("/todo", "GET", null)
+    call("/todo?date=2026-06-30", "GET", null)
       .then((response) => {
         setItems(response.data);
         setLoading(false);

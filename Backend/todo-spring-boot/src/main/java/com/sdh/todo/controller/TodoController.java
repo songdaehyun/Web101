@@ -7,14 +7,9 @@ import com.sdh.todo.service.TodoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +19,12 @@ public class TodoController {
 	
 	@Autowired
 	private TodoService service;
+
+    @GetMapping("/test")
+    public ResponseEntity<?> testTodo(){
+        List<TodoEntity> res = service.testService();
+        return ResponseEntity.ok().body(res);
+    }
 	
 	@PostMapping
 	public ResponseEntity<?> createTodo(@AuthenticationPrincipal String userId, @RequestBody TodoDTO dto){
@@ -33,6 +34,8 @@ public class TodoController {
 			entity.setId(null);
 			
 			entity.setUserId(userId);
+
+            entity.setTodoDate(LocalDate.of(2026, 6, 30));
 			
 			List<TodoEntity> entities = service.create(entity);
 			
@@ -49,9 +52,9 @@ public class TodoController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<?> retrieveTodoList(@AuthenticationPrincipal String userId) {
+	public ResponseEntity<?> retrieveTodoList(@AuthenticationPrincipal String userId, @RequestParam("date") LocalDate todoDate) {
 		
-		List<TodoEntity> entities = service.retrieve(userId);
+		List<TodoEntity> entities = service.retrieve(userId, todoDate);
 		
 		List<TodoDTO> dtos = entities.stream().map(a -> new TodoDTO(a)).collect(Collectors.toList());
 		
@@ -97,10 +100,5 @@ public class TodoController {
 	}
 	
 	
-	
-	
-	
-	
-	
-	
+
 }
