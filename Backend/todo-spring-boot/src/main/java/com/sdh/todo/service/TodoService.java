@@ -1,9 +1,14 @@
 package com.sdh.todo.service;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
+import java.util.Comparator;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+import com.sdh.todo.dto.CalendarTodoStatusDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
@@ -62,6 +67,51 @@ public class TodoService {
 
     public List<TodoEntity> retrieveMonthTodo(final String userId, LocalDate startDate, LocalDate endDate) {
         return repository.findByUserIdAndTodoDateBetween(userId, startDate, endDate);
+    }
+
+    public List<CalendarTodoStatusDTO> retrieveCalendarStatus(
+            String userId,
+            int year,
+            int month
+    ) {
+        YearMonth yearMonth = YearMonth.of(year, month);
+
+        LocalDate startDate = yearMonth.atDay(1);
+        LocalDate endDate = yearMonth.atEndOfMonth();
+
+        List<TodoEntity> todos = repository.findByUserIdAndTodoDateBetween(
+                userId,
+                startDate,
+                endDate
+        );
+
+        Map<LocalDate, List<TodoEntity>> groupedByDate = todos.stream()
+                .collect(Collectors.groupingBy(TodoEntity::getTodoDate));
+
+        return groupedByDate.entrySet().stream()
+                .map(entry -> {
+                    LocalDate todoDate = entry.getKey();
+                    List<TodoEntity> todosOfDate = entry.getValue();
+
+                    long totalCount = todosOfDate.size();
+
+                    long doneCount = todosOfDate.stream()
+                            .filter(TodoEntity::isDone)
+                            .count();
+
+                    String status = totalCount == doneCount
+                            ? "COMPLETE"
+                            : "INCOMPLETE";
+
+                    return CalendarTodoStatusDTO.builder()
+                            .todoDate(todoDate)
+                            .totalCount(totalCount)
+                            .doneCount(doneCount)
+                            .status(status)
+                            .build();
+                })
+                .sorted(Comparator.comparing(CalendarTodoStatusDTO::getTodoDate))
+                .collect(Collectors.toList());
     }
 	
 	public List<TodoEntity> update(final TodoEntity entity){

@@ -6,7 +6,6 @@ import {
   Container,
   List,
   Paper,
-  Grid,
   Button,
   AppBar,
   Toolbar,
@@ -61,23 +60,70 @@ function TodoPage() {
     </Paper>
   );
 
-  //navigationBar
-  let navigationBar = (
-    <AppBar position="static">
-      <Toolbar>
-        <Grid justifyContent="space-between" container>
-          <Grid item>
-            <Typography variant="h6">오늘의 할일</Typography>
-          </Grid>
-          <Grid item>
-            <Button color="inherit" raised="ture" onClick={signout}>
-              로그아웃
-            </Button>
+/*
+// navigationBar
+let navigationBar = (
+  <AppBar position="static">
+    <Toolbar>
+      <Grid justifyContent="space-between" alignItems="center" container>
+        <Grid item>
+          <Grid container alignItems="center" spacing={2}>
+            <Grid item>
+              <Button color="inherit" onClick={() => navigate("/")}>
+                 ← 달력으로 돌아가기
+              </Button>
+            </Grid>
+
+            <Grid item>
+              <Typography variant="h6">
+                {date} 할일
+              </Typography>
+            </Grid>
           </Grid>
         </Grid>
-      </Toolbar>
-    </AppBar>
-  );
+
+        <Grid item>
+          <Button color="inherit" onClick={signout}>
+            로그아웃
+          </Button>
+        </Grid>
+      </Grid>
+    </Toolbar>
+  </AppBar>
+);
+*/
+let navigationBar = (
+  <AppBar position="static">
+    <Toolbar sx={{ position: "relative", minHeight: 64 }}>
+      <Button
+        color="inherit"
+        onClick={() => navigate("/")}
+        sx={{ position: "absolute", left: 16 }}
+      >
+        ← 달력
+      </Button>
+
+      <Typography
+        variant="h6"
+        sx={{
+          position: "absolute",
+          left: "50%",
+          transform: "translateX(-50%)",
+        }}
+      >
+        {date} 할일
+      </Typography>
+
+      <Button
+        color="inherit"
+        onClick={signout}
+        sx={{ position: "absolute", right: 16 }}
+      >
+        로그아웃
+      </Button>
+    </Toolbar>
+  </AppBar>
+);
   /* 로딩중 아닐때 렌더링 할 부분 */
   let todoListPage = (
     <div>

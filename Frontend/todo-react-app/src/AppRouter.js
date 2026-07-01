@@ -28,7 +28,7 @@ function AppRouter() {
           <Route path="signup" element={<SignUp />} />
         </Routes>
       </BrowserRouter>
-      <Box mt={5}>
+      <Box mt={5} mb={5}>
         <Copyright />
       </Box>
     </div>

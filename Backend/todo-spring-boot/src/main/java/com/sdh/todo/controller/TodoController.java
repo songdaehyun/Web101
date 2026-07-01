@@ -1,5 +1,6 @@
 package com.sdh.todo.controller;
 
+import com.sdh.todo.dto.CalendarTodoStatusDTO;
 import com.sdh.todo.dto.ResponseDTO;
 import com.sdh.todo.dto.TodoDTO;
 import com.sdh.todo.model.TodoEntity;
@@ -60,6 +61,23 @@ public class TodoController {
 		
 		return ResponseEntity.ok().body(response);
 	}
+
+    @GetMapping("/calendar")
+    public ResponseEntity<?> retrieveCalendarStatus(
+            @AuthenticationPrincipal String userId,
+            @RequestParam int year,
+            @RequestParam int month
+    ) {
+        List<CalendarTodoStatusDTO> statusList =
+                service.retrieveCalendarStatus(userId, year, month);
+
+        ResponseDTO<CalendarTodoStatusDTO> response =
+                ResponseDTO.<CalendarTodoStatusDTO>builder()
+                        .data(statusList)
+                        .build();
+
+        return ResponseEntity.ok().body(response);
+    }
 	
 	@PutMapping
 	public ResponseEntity<?> updateTodo(@AuthenticationPrincipal String userId, @RequestBody TodoDTO dto){
@@ -96,7 +114,7 @@ public class TodoController {
 			
 		}
 	}
-	
-	
+
+
 
 }
