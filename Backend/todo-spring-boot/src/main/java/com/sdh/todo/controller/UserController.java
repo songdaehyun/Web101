@@ -7,6 +7,7 @@ import com.sdh.todo.model.UserEntity;
 import com.sdh.todo.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,7 +50,7 @@ public class UserController {
 			return ResponseEntity.ok().body(responseUserDTO);
 		} catch (Exception e) {
 			ResponseDTO responseDTO = ResponseDTO.builder().error(e.getMessage()).build();
-			return ResponseEntity.badRequest().body(responseDTO);
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(responseDTO);
 		}
 	}
 	
@@ -73,8 +74,8 @@ public class UserController {
 			ResponseDTO responseDTO = ResponseDTO.builder()
 					.error("Login failed.")
 					.build();
-			return ResponseEntity.badRequest()
-					.body(responseDTO);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(responseDTO);
 		}
 	}
 	

@@ -13,6 +13,12 @@ function SignUp() {
 
     signup({ username: username, password: password }).then((response) => {
       window.location.href = "/login";
+    }).catch((error) => {
+      if (error.message === "CONFLICT") {
+        alert("이미 존재하는 아이디입니다");
+      } else {
+        alert("회원가입 중 오류가 발생했습니다.");
+      }
     });
   };
 

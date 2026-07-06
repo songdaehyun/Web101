@@ -21,18 +21,17 @@ export function call(api, method, request) {
     .then((response) => {
       if (response.status === 200) {
         return response.json();
+      } else if (response.status === 401){
+        throw new Error("UNAUTHORIZED");
       } else if (response.status === 403) {
         window.location.href = "/login";
-      } else {
-        Promise.reject(response);
-        throw Error(response);
+      } else if (response.status === 409) {
+        throw new Error("CONFLICT");
+      }else {
+        throw new Error(response);
       }
-    })
-    .catch((error) => {
-      console.log("http error");
-      console.log(error);
     });
-}
+  }
 
 export function signin(userDTO) {
   return call("/auth/signin", "POST", userDTO).then((response) => {
@@ -41,7 +40,13 @@ export function signin(userDTO) {
       localStorage.setItem("ACESS_TOKEN", response.token);
       window.location.href = "/";
     }
-  });
+  }).catch((error) => {
+      if (error.message === "UNAUTHORIZED") {
+        alert("아이디 또는 비밀번호를 확인해주세요.");
+      } else {
+        alert("로그인 중 오류가 발생했습니다.");
+      }
+    });
 }
 
 export function signout() {
@@ -50,5 +55,5 @@ export function signout() {
 }
 
 export function signup(userDTO) {
-  return call("/auth/signup", "POST", userDTO);
+  return call("/auth/signup", "POST", userDTO)
 }
