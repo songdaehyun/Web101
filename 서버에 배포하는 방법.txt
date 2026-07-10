@@ -1,0 +1,12 @@
+#리액트파일 서버에 올리기.
+1. build: npm run build
+2. 서버 임시폴더에 전송: scp -r build/* deploy@song-todo.cloud:/tmp/react-build/
+3. 해당버전 폴더 생성: sudo mkdir -p /var/www/todo/releases/v0.2.0
+4. build 파일 옮기기: sudo mv /tmp/react-build/* /var/www/todo/releases/v0.2.0
+
+
+#스프링부트파일 서버에 올리기.
+
+0. build.gradle에 버전 적기.
+1. build: .\gradlew.bat clean build
+2. scp .\todo-spring-boot-0.2.0.jar deploy@song-todo.cloud:/opt/todo/

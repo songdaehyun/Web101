@@ -21,7 +21,7 @@ function TodoPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    call(`/todo?date=${date}`, "GET", null)
+    call(`/api/todo?date=${date}`, "GET", null)
       .then((response) => {
         setItems(response.data);
         setLoading(false);
@@ -34,15 +34,15 @@ function TodoPage() {
 
   const addItem = (item) => {
     const newItem = {...item,todoDate: date,};
-    call("/todo", "POST", newItem).then((response) => setItems(response.data));
+    call("/api/todo", "POST", newItem).then((response) => setItems(response.data));
   };
 
   const deleteItem = (item) => {
-    call("/todo", "DELETE", item).then((response) => setItems(response.data));
+    call("/api/todo", "DELETE", item).then((response) => setItems(response.data));
   };
 
   const editItem = (item) => {
-    call("/todo", "PUT", item).then((response) => setItems(response.data));
+    call("/api/todo", "PUT", item).then((response) => setItems(response.data));
   };
 
   let todoItems = items.length > 0 && (

@@ -42,7 +42,7 @@ function CalendarPage() {
     const year = activeStartDate.getFullYear();
     const month = activeStartDate.getMonth() + 1;
 
-    call(`/todo/calendar?year=${year}&month=${month}`, "GET", null)
+    call(`/api/todo/calendar?year=${year}&month=${month}`, "GET", null)
       .then((response) => {
         const statusMap = {};
 
