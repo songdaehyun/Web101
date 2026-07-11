@@ -27,4 +27,4 @@
 
 ### 아키텍쳐
 
-![Architecture](./Web101 Arch.png)
+![Architecture](./Web101_Arch.png)
