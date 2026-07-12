@@ -17,6 +17,7 @@ import { call, signout } from "./ApiService";
 function TodoPage() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [dots, setDots] = useState(".");
   const { date } = useParams();
   const navigate = useNavigate();
 
@@ -31,6 +32,15 @@ function TodoPage() {
         // 에러 처리 로직 추가
       });
   }, [date]);
+
+  //로딩중 ... 변화
+  useEffect(() => {
+  const interval = setInterval(() => {
+    setDots((prev) => (prev === "..." ? "" : prev + "."));
+  }, 500);
+
+  return () => clearInterval(interval);
+  }, []);
 
   const addItem = (item) => {
     const newItem = {...item,todoDate: date,};
@@ -60,38 +70,7 @@ function TodoPage() {
     </Paper>
   );
 
-/*
-// navigationBar
-let navigationBar = (
-  <AppBar position="static">
-    <Toolbar>
-      <Grid justifyContent="space-between" alignItems="center" container>
-        <Grid item>
-          <Grid container alignItems="center" spacing={2}>
-            <Grid item>
-              <Button color="inherit" onClick={() => navigate("/")}>
-                 ← 달력으로 돌아가기
-              </Button>
-            </Grid>
 
-            <Grid item>
-              <Typography variant="h6">
-                {date} 할일
-              </Typography>
-            </Grid>
-          </Grid>
-        </Grid>
-
-        <Grid item>
-          <Button color="inherit" onClick={signout}>
-            로그아웃
-          </Button>
-        </Grid>
-      </Grid>
-    </Toolbar>
-  </AppBar>
-);
-*/
 let navigationBar = (
   <AppBar position="static">
     <Toolbar sx={{ position: "relative", minHeight: 64 }}>
@@ -136,7 +115,20 @@ let navigationBar = (
   );
 
   /* 로딩중일때 렌더링 할 부분 */
-  let loadingPage = <h1> 로딩중...</h1>;
+  let loadingPage = (
+  <div
+    style={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      minHeight: "50vh",
+    }}
+  >
+    <h1>할일목록 로딩중
+    <span style={{ display: "inline-block", width: "40px" }}>{dots}</span>
+    </h1>
+  </div>
+  );
   let content = loadingPage;
 
   if (!loading) {

@@ -18,6 +18,8 @@ import { call, signout } from "./ApiService";
 
 function CalendarPage() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [dots, setDots] = useState(".");
 
   // 현재 선택된 날짜
   const [value, setValue] = useState(new Date());
@@ -51,6 +53,7 @@ function CalendarPage() {
         });
 
         setTodoStatusMap(statusMap);
+        setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching calendar status:", error);
@@ -62,24 +65,36 @@ function CalendarPage() {
     navigate(`/todo/${formattedDate}`);
   };
 
-  return (
-    <div>
-      <AppBar position="static">
-        <Toolbar>
-          <Grid justifyContent="space-between" container>
-            <Grid item>
-              <Typography variant="h6">할일 달력</Typography>
-            </Grid>
+  //로딩중 ... 변화
+  useEffect(() => {
+  const interval = setInterval(() => {
+    setDots((prev) => (prev === "..." ? "" : prev + "."));
+  }, 500);
 
-            <Grid item>
-              <Button color="inherit" onClick={signout}>
-                로그아웃
-              </Button>
-            </Grid>
+  return () => clearInterval(interval);
+  }, []);
+
+  /* 로딩중 아닐때 렌더링 할 부분 */
+  let navigationBar = (
+    <AppBar position="static">
+      <Toolbar>
+        <Grid justifyContent="space-between" container>
+          <Grid item>
+            <Typography variant="h6">할일 달력</Typography>
           </Grid>
-        </Toolbar>
-      </AppBar>
 
+          <Grid item>
+            <Button color="inherit" onClick={signout}>
+              로그아웃
+            </Button>
+          </Grid>
+        </Grid>
+      </Toolbar>
+    </AppBar>
+  );
+  let calendarPage = (
+    <div>
+      {navigationBar}
       <Container maxWidth="md" className="calendar-container">
         <Paper className="calendar-paper">
           <Typography variant="h4" align="center" gutterBottom>
@@ -118,6 +133,29 @@ function CalendarPage() {
       </Container>
     </div>
   );
+
+  /* 로딩중일때 렌더링 할 부분 */
+  let loadingPage = (
+  <div
+    style={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      minHeight: "50vh",
+    }}
+  >
+    <h1>달력 로딩중
+    <span style={{ display: "inline-block", width: "40px" }}>{dots}</span>
+    </h1>
+  </div>
+  );
+  let content = loadingPage;
+
+  if (!loading) {
+    content = calendarPage;
+  }
+
+  return <div className="CalenderPage">{content}</div>;
 }
 
 export default CalendarPage;

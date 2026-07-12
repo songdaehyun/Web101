@@ -1,9 +1,13 @@
 #리액트파일 서버에 올리기.
 1. build: npm run build
-2. 서버 임시폴더에 전송: scp -r build/* deploy@song-todo.cloud:/tmp/react-build/
+2. 서버 임시 폴더 준비 ssh deploy@song-todo.cloud "rm -rf /tmp/react-build && mkdir -p /tmp/react-build"
+3. 서버 임시폴더에 전송: scp -r build/* deploy@song-todo.cloud:/tmp/react-build/
 3. 해당버전 폴더 생성: sudo mkdir -p /var/www/todo/releases/v0.2.0
 4. build 파일 옮기기: sudo mv /tmp/react-build/* /var/www/todo/releases/v0.2.0
-
+5. 엔진엑스가 사용가능하도록 소유권 변경 sudo chown -R www-data:www-data /var/www/todo/releases/v0.2.0
+6. 현재 배포 버전을 가리키는 심볼릭 링크 변경 sudo ln -sfn /var/www/todo/releases/v0.2.0 /var/www/todo/current
+7. 엔진엑스 설정 검사 sudo nginx -t
+8. 엔진엑스 설정 다시읽기 sudo systemctl reload nginx
 
 #스프링부트파일 서버에 올리기.
 
