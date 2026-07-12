@@ -1,0 +1,11 @@
+2026/7/12 
+
+램 1GB 서버에 엔진엑스, 스프링부트, mysql 실행하다보니 OOM 발생함.
+SWAP파일 생성함. 
+
+sudo fallocate -l 1G /swapfile   스왑파일 생성
+sudo chmod 600 /swapfile       권한변경
+sudo mkswap /swapfile           파일을 스왑 형식으로 초기화
+sudo swapon /swapfile           스왑 활성화
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab   재부팅 후에도 유지
+free -h                                메모리 사용량 확인
